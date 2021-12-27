@@ -37,5 +37,18 @@
             $stmt->execute();
             return $stmt;
         }
+
+        public function getALLNotifications($bdd){
+            $sqlQuery = 
+                "SELECT 
+                    *
+                FROM
+                    notificationbean";
+
+            $stmt = $bdd->prepare($sqlQuery);
+
+            $stmt->execute();
+            return $stmt;
+        }
     }
 ?>
