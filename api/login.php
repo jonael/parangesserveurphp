@@ -31,8 +31,8 @@
         $user_arr = array();
         while($row = $stmt->fetch()) {
             extract($row);
-            if ($item->getPassword() === $row['password']) {
-            //if(password_verify($item->getMdpUser(), $row['mdp_user'])){
+            //if ($item->getPassword() === $row['password']) {
+            if(password_verify($item->getPassword(), $row['password'])){
                 $town_arr = array();
                 $itemTown->setIdTown($row['idTown']);
                 $town = $itemTown->getSingleTown($bdd);
@@ -80,12 +80,12 @@
                     'voluntary' => $notif_arr,
                 );
                 array_push($user_arr, $user_item);
+                http_response_code(200);
+                echo json_encode($user_arr);
             } else {
                 http_response_code(201);
-                echo json_encode(array("message" =>"mot de passe incorrect"));
+                echo json_encode(array('message' =>'mot de passe incorrect'));
             }
         }
-        http_response_code(200);
-        echo json_encode($user_arr);
     }
 ?>

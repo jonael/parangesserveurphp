@@ -13,6 +13,7 @@
         private $age;
         private $phone;
         private $since;
+        private $shareInfos;
         private $voluntary = [];
         private $idTown;
         private $roles = [];
@@ -89,6 +90,13 @@
         public function setSince($since){
             $this->since = $since;
         }
+
+        public function getShareInfos(){
+            return $this->shareInfos;
+        }
+        public function setShareInfos($shareInfos){
+            $this->shareInfos = $shareInfos;
+        }
     
         public function getVoluntary(){
             return $this->voluntary;
@@ -117,31 +125,6 @@
                             Fonctions :
         -----------------------------------------------------*/
 
-        //méthode ajout d'un utilisateur en bdd
-        public function createUser($bdd)
-        {   
-            try
-            {   
-                //requête ajout d'un utilisateur
-                $req = $bdd->prepare(
-                    'INSERT INTO 
-                        userbean(pseudo, password, mail)
-                    VALUES (:pseudo, :password, :mail)'
-                );
-                //éxécution de la requête SQL
-                $req->execute(array(
-                'pseudo' => $this->pseudo,
-                'password' => $this->password,
-                'mail' => $this->mail,)
-                );
-                return true;
-            }
-            catch(Exception $e)
-            {
-            //affichage d'une exception en cas d’erreur
-            die('Erreur : '.$e->getMessage());
-            }        
-        }
         
         // ajout Jonathan méthode qui retourne un utilisateur
         public function getSingleUser($bdd){
@@ -157,6 +140,141 @@
 
             $stmt->execute();
             return $stmt;
+        }
+
+        public function verifyPseudoAndMail($bdd){
+            $sqlQuery = 
+                "SELECT 
+                    *
+                FROM
+                    userbean
+                WHERE 
+                    pseudo = '".$this->pseudo."'
+                OR 
+                    mail = '".$this->mail."'";
+
+            $stmt = $bdd->prepare($sqlQuery);
+
+            $stmt->execute();
+            return $stmt;
+        }
+
+        // CREATE
+        public function createUser($bdd){
+            $password2 = password_hash($this->password, PASSWORD_BCRYPT);
+            $date = new DateTime('NOW');
+            $dateToStock = date_format($date, 'd-m-Y H:i:s');
+            $sqlQuery = "INSERT INTO
+                        userbean
+                    SET
+                        pseudo = :pseudo, 
+                        password = :password, 
+                        mail = :mail,
+                        shareInfos = :shareInfos,
+                        since = :since";
+
+            $stmt = $bdd->prepare($sqlQuery);
+        
+            // bind data
+            $stmt->bindParam(":pseudo", $this->pseudo);
+            $stmt->bindParam(":password", $password2);
+            $stmt->bindParam(":mail", $this->mail);
+            $stmt->bindParam(":shareInfos", $this->shareInfos);
+            $stmt->bindParam(":since", $dateToStock);
+
+            $stmt->execute();
+            return true;
+        }
+
+        // UPDATE
+        public function updateUser(){
+            $sqlQuery = 
+                "UPDATE
+                    ". $this->db_table ."
+                SET
+                    pseudo = :pseudo, 
+                    password = :password, 
+                    mail = :mail, 
+                    idRoleSite = :idRoleSite, 
+                    idRoleGame = :idRoleGame
+                WHERE 
+                    pseudo = :pseudo";
+        
+            $stmt = $this->conn->prepare($sqlQuery);
+        
+            $this->pseudo=htmlspecialchars(strip_tags($this->pseudo));
+            $this->password=htmlspecialchars(strip_tags($this->password));
+            $this->mail=htmlspecialchars(strip_tags($this->mail));
+            $this->idRoleSite=htmlspecialchars(strip_tags($this->idRoleSite));
+            $this->idRoleGame=htmlspecialchars(strip_tags($this->idRoleGame));
+            $this->pseudo=htmlspecialchars(strip_tags($this->pseudo));
+        
+            // bind data
+            $stmt->bindParam(":pseudo", $this->pseudo);
+            $stmt->bindParam(":password", $this->password);
+            $stmt->bindParam(":mail", $this->mail);
+            $stmt->bindParam(":idRoleSite", $this->idRoleSite);
+            $stmt->bindParam(":idRoleGame", $this->idRoleGame);
+            $stmt->bindParam(":pseudo", $this->pseudo);
+        
+            if($stmt->execute()){
+                return true;
+            }
+            return false;
+        }
+
+        // DELETE
+        function deleteUser(){
+            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE pseudo = ?";
+            $stmt = $this->conn->prepare($sqlQuery);
+        
+            $this->pseudo=htmlspecialchars(strip_tags($this->pseudo));
+        
+            $stmt->bindParam(1, $this->pseudo);
+        
+            if($stmt->execute()){
+                return true;
+            }
+            return false;
+        }
+
+        public function addRole($bdd, $idRole, $idUser){
+            $sqlQuery = 
+                "INSERT INTO 
+                    avoir
+                SET
+                    idUser = :idUser, 
+                    idRole = :idRole";
+
+            $stmt = $bdd->prepare($sqlQuery);
+        
+            // bind data
+            $stmt->bindParam(":idUser", $idUser);
+            $stmt->bindParam(":idRole", $idRole);
+
+            $stmt->execute();
+            return true;
+        }
+
+        public function addNotifications($bdd, $idUser, $idNotification){
+            $statut = 0;
+            $sqlQuery = 
+            "INSERT INTO 
+                activer
+            SET
+                idUser = :idUser, 
+                idNotification = :idNotification,
+                statutNotification = :statutNotification";
+
+            $stmt = $bdd->prepare($sqlQuery);
+        
+            // bind data
+            $stmt->bindParam(":idUser", $idUser);
+            $stmt->bindParam(":idNotification", $idNotification);
+            $stmt->bindParam(":statutNotification", $statut);
+
+            $stmt->execute();
+            return true;
         }
     }
 ?>
