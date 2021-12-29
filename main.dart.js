@@ -21355,7 +21355,7 @@ Ua(a,b){return A.ayT(a,b)},
 ayT(a,b){var s=0,r=A.a_(t.z),q,p=2,o,n=[],m,l,k,j,i,h,g,f,e,d
 var $async$Ua=A.V(function(c,a0){if(c===1){o=a0
 s=p}while(true)switch(s){case 0:e=""
-e="https://www.paranges-sos.com/paranges-sos/api/login.php"
+e="http://localhost/api/login.php"
 p=4
 i=A.lX(e)
 h=t.N
@@ -21397,7 +21397,7 @@ Ub(a,b,c){return A.ayU(a,b,c)},
 ayU(a,b,c){var s=0,r=A.a_(t.z),q,p=2,o,n=[],m,l,k,j,i,h,g,f,e,d
 var $async$Ub=A.V(function(a0,a1){if(a0===1){o=a1
 s=p}while(true)switch(s){case 0:e=""
-e="https://www.paranges-sos.com/api/register.php"
+e="http://localhost/api/register.php"
 p=4
 i=A.lX(e)
 h=t.N
