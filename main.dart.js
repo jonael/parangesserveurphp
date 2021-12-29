@@ -21359,7 +21359,7 @@ e="http://localhost/api/login.php"
 p=4
 i=A.lX(e)
 h=t.N
-g=A.aJ(["content-type","application/json"],h,h)
+g=A.aJ(["content-type","application/json","Access-Control-Allow-Origin","*"],h,h)
 s=7
 return A.aa(A.atj(i,B.aq.Bu(A.aJ(["pseudo",a,"password",b],h,h),null),g),$async$Ua)
 case 7:m=a0
@@ -21401,7 +21401,7 @@ e="http://localhost/api/register.php"
 p=4
 i=A.lX(e)
 h=t.N
-g=A.aJ(["content-type","application/json"],h,h)
+g=A.aJ(["content-type","application/json","Access-Control-Allow-Origin","*"],h,h)
 s=7
 return A.aa(A.atj(i,B.aq.Bu(A.aJ(["pseudo",a,"password",b,"mail",c],h,h),null),g),$async$Ub)
 case 7:m=a1
