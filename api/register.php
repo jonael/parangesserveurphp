@@ -54,7 +54,7 @@
                     $itemNotif = new Notificationbean();
                     $notif_arr = array();
                     $notifications = $itemNotif->getNotifications($bdd, $row['idUser']);
-                    while($row4 = $notifications->fetch()) {
+                    while($row3 = $notifications->fetch()) {
                         extract($row3);
                         $notif = array(
                             "idNotification" =>  intval($row3['idNotification'], 10),
@@ -74,7 +74,6 @@
                         'phone' => $row['phone'],
                         'since' => $row['since'],
                         'shareInfos' => intval($row['shareInfos'], 10),
-                        'town' => $town_arr,
                         'roles' => $role_arr,
                         'voluntary' => $notif_arr,
                     );
