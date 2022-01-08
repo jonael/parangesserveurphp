@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\map;
+
     header("Access-Control-Allow-Origin: *");
     header("Content-Type: application/json; charset=UTF-8");
     header("Access-Control-Allow-Methods: POST");
@@ -12,7 +15,6 @@
     include ('../config/connectBdd.php');
 
     $item = new Userbean();
-    $itemTown = new Townbean();
     $itemRole = new Rolebean();
     $itemNotif = new Notificationbean();
 
@@ -33,16 +35,21 @@
             extract($row);
             //if ($item->getPassword() === $row['password']) {
             if(password_verify($item->getPassword(), $row['password'])){
-                $town_arr = array();
-                $itemTown->setIdTown($row['idTown']);
-                $town = $itemTown->getSingleTown($bdd);
-                while($row2 = $town->fetch()) {
-                    extract($row2);
-                    $town_arr = array(
-                        "idTown" =>  intval($row2['idTown'], 10),
-                        "townName" => $row2['townName'],
-                        "townCp" => $row2['townCp']
-                    );
+                $town;
+                if($row['idTown'] != null){
+                    $itemTown = new Townbean();
+                    $itemTown->setIdTown($row['idTown']);
+                    $townToSearch = $itemTown->getSingleTown($bdd);
+                    class Town {}
+                    while($row2 = $townToSearch->fetch()) {
+                        extract($row2);
+                        $town = new Town();
+                        $town->idTown = intval($row2['idTown'], 10);
+                        $town->townName = $row2['townName'];
+                        $town->townCp = $row2['townCp'];
+                    }
+                } else {
+                    $town = null;
                 }
                 $role_arr = array();
                 $roles = $itemRole->getRoles($bdd, $row['idUser']);
@@ -75,13 +82,13 @@
                     'phone' => $row['phone'],
                     'since' => $row['since'],
                     'shareInfos' => intval($row['shareInfos'], 10),
-                    'town' => $town_arr,
+                    'town' => $town,
                     'roles' => $role_arr,
                     'voluntary' => $notif_arr,
                 );
-                array_push($user_arr, $user_item);
+                //array_push($user_arr, $user_item);
                 http_response_code(200);
-                echo json_encode($user_arr);
+                echo json_encode($user_item);
             } else {
                 http_response_code(201);
                 echo json_encode(array('message' =>'mot de passe incorrect'));

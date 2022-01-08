@@ -16,6 +16,7 @@
         private $shareInfos;
         private $voluntary = [];
         private $idTown;
+        private $town;
         private $roles = [];
         
         /*-----------------------------------------------------
@@ -110,6 +111,13 @@
         }
         public function setIdTown($idTown){
             $this->idTown = $idTown;
+        }
+
+        public function getTown(){
+            return $this->town;
+        }
+        public function setTown($town){
+            $this->town = $town;
         }
     
         public function getRoles(){

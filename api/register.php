@@ -74,6 +74,7 @@
                         'phone' => $row['phone'],
                         'since' => $row['since'],
                         'shareInfos' => intval($row['shareInfos'], 10),
+                        'town' => null,
                         'roles' => $role_arr,
                         'voluntary' => $notif_arr,
                     );
