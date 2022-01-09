@@ -68,6 +68,7 @@ use function PHPSTORM_META\map;
                     $notif = array(
                         "idNotification" =>  intval($row4['idNotification'], 10),
                         "notificationName" => $row4['notificationName'],
+                        "statutNotification" => intval($row4['statutNotification'], 10)
                     );
                     array_push($notif_arr, $notif);
                 }

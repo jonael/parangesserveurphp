@@ -27,8 +27,6 @@
 					activer
 				WHERE
                     activer.idUser = '".$idUser."'
-				AND
-                    activer.statutNotification = 1
                 AND
                     activer.idNotification = notificationbean.idNotification";
 

@@ -59,6 +59,7 @@
                         $notif = array(
                             "idNotification" =>  intval($row3['idNotification'], 10),
                             "notificationName" => $row3['notificationName'],
+                            "statutNotification" => intval($row3['statutNotification'],10)
                         );
                         array_push($notif_arr, $notif);
                     }
