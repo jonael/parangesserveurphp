@@ -231,6 +231,27 @@
             return false;
         }
 
+        public function updateShareInfos($bdd, $idUser, $shareInfos){
+            $sqlQuery = 
+                "UPDATE
+                    userbean
+                SET
+                    shareInfos = :shareInfos
+                WHERE 
+                    idUser = :idUser";
+        
+            $stmt = $bdd->prepare($sqlQuery);
+        
+            // bind data
+            $stmt->bindParam(":shareInfos", $shareInfos);
+            $stmt->bindParam(":idUser", $idUser);
+        
+            if($stmt->execute()){
+                return true;
+            }
+            return false;
+        }
+
         // DELETE
         function deleteUser(){
             $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE pseudo = ?";

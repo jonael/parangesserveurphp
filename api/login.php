@@ -87,7 +87,6 @@ use function PHPSTORM_META\map;
                     'roles' => $role_arr,
                     'voluntary' => $notif_arr,
                 );
-                //array_push($user_arr, $user_item);
                 http_response_code(200);
                 echo json_encode($user_item);
             } else {

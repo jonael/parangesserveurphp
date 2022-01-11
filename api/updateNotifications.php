@@ -8,6 +8,7 @@
     include ('../config/connectBdd.php');
     include ('../utils/utilsFunctions.php');
     include ('../models/notificationbean.php');
+    include ('../models/userbean.php');
 
     $data = json_decode(file_get_contents("php://input"));
 
@@ -16,8 +17,10 @@
     $call = $data->call;
     $notif = $data->notif;
     $idUser = $data->idUser;
+    $share = $data->share;
 
     $itemsNotif = new Notificationbean();
+    $itemUser = new Userbean();
 
     $stmt = $itemsNotif->getALLNotifications($bdd);
 
@@ -26,6 +29,7 @@
     $correct2 = false;
     $correct3 = false;
     $correct4 = false;
+    $correct5 = false;
     while($row = $stmt->fetch()) {
         extract($row);
         if($row['idNotification'] == 1) {
@@ -57,7 +61,12 @@
             }
         }
     }
-    if ($correct1 && $correct2 && $correct3 && $correct4) {
+    if($itemUser->updateShareInfos($bdd, $idUser, $share)) {
+        $correct5 = true;
+    } else {
+        $correct = false;
+    }
+    if ($correct1 && $correct2 && $correct3 && $correct4 && $correct5) {
         http_response_code(200);
         echo json_encode(array('message' =>'vos paramètres ont été mis à jour avec succès'));
     } else {
